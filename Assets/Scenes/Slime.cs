@@ -3,10 +3,17 @@ using UnityEngine;
 public class Slime : MonoBehaviour
 {
     public GameObject slimePrefab;
-    public float duplicationRadius = 0.250f;
+    public float duplicationRadius = 0.25f;
     public int numberOfDuplicates = 2;
     public float sizeReductionFactor = 2f;
-    public float minScaleThreshold = 0.25f;
+    public float minScaleThreshold = 0.5f;
+
+     private Light pointLight;
+
+    void Start()
+    {
+        pointLight = GetComponentInChildren<Light>();
+    }
 
     void Update()
     {
@@ -19,13 +26,13 @@ public class Slime : MonoBehaviour
             {
                 if (hit.collider.gameObject == gameObject)
                 {
-                    if (transform.localScale.x <= minScaleThreshold) // Check scale threshold
+                    if (transform.localScale.x >= minScaleThreshold) // Check scale threshold
                     {
-                        Destroy(gameObject);
+                        DuplicateSlime();
                     }
                     else
-                    {                       
-                        DuplicateSlime();
+                    {
+                        Destroy(gameObject);
                     }
                 }
             }
@@ -43,8 +50,14 @@ public class Slime : MonoBehaviour
             Vector3 offset = new Vector3(Mathf.Cos(angle) * duplicationRadius, 0f, Mathf.Sin(angle) * duplicationRadius);
             GameObject duplicate = Instantiate(slimePrefab, transform.position + offset, Quaternion.identity);
             duplicate.transform.localScale /= sizeReductionFactor;
+
+            // Adjust light intensity
+            Light duplicateLight = duplicate.GetComponentInChildren<Light>();
+            if (duplicateLight != null)
+            {
+                duplicateLight.intensity = pointLight.intensity / 2f;
+            }
         }
         Destroy(gameObject);
     }
 }
-
