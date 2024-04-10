@@ -422,7 +422,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eabfe6a9f521794099268d53f83694a, type: 3}
+  m_Script: {fileID: 11500000, guid: 687dd17642776b640b7454be0e3520c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 1142208319}
@@ -573,7 +573,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1142208314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69fb932ac1403df4090d645141f9ba95, type: 3}
+  m_Script: {fileID: 11500000, guid: 11047391affe8fb449aeb445447d1fb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movementJoystick: {fileID: 1906058222}
