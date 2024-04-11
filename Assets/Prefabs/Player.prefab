@@ -251,9 +251,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1979153933184142815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8604b4f5ef7b9f45b5b87285e8d22bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9cfb58a6103d7504c855ce55bd7680cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movementJoystick: {fileID: 0}
   rotationJoystick: {fileID: 0}
-  speed: 5
+  speed: 0
