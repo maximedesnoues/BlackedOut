@@ -6,15 +6,20 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Joystick movementJoystick;
     [SerializeField] private Joystick rotationJoystick;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Transform projectileSpawnPoint;
 
     [SerializeField] private float speed;
+    [SerializeField] private float fireThreshold;
+    [SerializeField] private float fireRate;
 
     private Rigidbody rb;
 
     private Vector3 moveDirection;
     private Vector3 rotationDirection;
 
-    private float lastYRotation = 0f;
+    private float lastYRotation;
+    private float lastFireTime;
 
     private void Start()
     {
@@ -25,6 +30,7 @@ public class PlayerController : MonoBehaviour
     {
         ProcessInputs();
         Rotate();
+        CheckFireCondition();
     }
 
     private void FixedUpdate()
@@ -59,5 +65,46 @@ public class PlayerController : MonoBehaviour
     private void Rotate()
     {
         transform.rotation = Quaternion.Euler(0, lastYRotation, 0);
+    }
+
+    private void CheckFireCondition()
+    {
+        float distanceFromCenter = Vector2.Distance(new Vector2(rotationJoystick.Horizontal, rotationJoystick.Vertical), Vector2.zero);
+
+        if (distanceFromCenter > fireThreshold && Time.time > lastFireTime + fireRate)
+        {
+            FireProjectile();
+            lastFireTime = Time.time; // Mise à jour du temps pour le dernier tir
+        }
+    }
+
+    private void FireProjectile()
+    {
+        if (projectilePrefab && projectileSpawnPoint)
+        {
+            // Instancie le projectile au point de départ qui devrait être approximativement à la tête du joueur
+            GameObject projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.Euler(0, lastYRotation, 0));
+
+            // Obtient le Rigidbody du projectile
+            Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
+
+            if (projectileRb != null)
+            {
+                // Désactive la gravité
+                projectileRb.useGravity = false;
+
+                // Utilise la rotation du projectileSpawnPoint pour déterminer la direction du tir
+                Vector3 fireDirection = projectileSpawnPoint.forward;
+
+                // Applique une force au projectile dans la direction calculée
+                projectileRb.AddForce(fireDirection.normalized * 1000);
+
+                // Empêche les collisions entre le joueur et les projectiles
+                Physics.IgnoreCollision(projectile.GetComponent<Collider>(), GetComponent<Collider>());
+
+                // Détruit le projectile après 3 secondes
+                Destroy(projectile, 1.5f);
+            }
+        }
     }
 }
